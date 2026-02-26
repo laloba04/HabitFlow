@@ -263,7 +263,7 @@ Este proyecto cubre los siguientes temas del examen:
 ## 👩‍💻 Autora
 
 **María Bravo Angulo**
-- LinkedIn: [maria-bravo-angulo](https://linkedin.com/in/maria-bravo-angulo)
+- LinkedIn: [maria-bravo-angulo](https://www.linkedin.com/in/maria-bravo-angulo-363133337/)
 - GitHub: [@laloba04](https://github.com/laloba04)
 
 ## 📄 Licencia
