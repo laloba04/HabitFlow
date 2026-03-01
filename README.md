@@ -266,6 +266,3 @@ Este proyecto cubre los siguientes temas del examen:
 - LinkedIn: [maria-bravo-angulo](https://www.linkedin.com/in/maria-bravo-angulo-363133337/)
 - GitHub: [@laloba04](https://github.com/laloba04)
 
-## 📄 Licencia
-
-MIT License

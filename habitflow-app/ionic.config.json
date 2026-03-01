@@ -1,0 +1,7 @@
+{
+  "name": "habitflow-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
