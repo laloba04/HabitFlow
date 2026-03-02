@@ -1,13 +1,157 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>habits</ion-title>
+    <ion-title>
+      <span class="title-text">Mis hábitos</span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">habits</ion-title>
+      <ion-title size="large">
+        <span class="title-large">Mis hábitos</span>
+      </ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Fondo animado -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+  </div>
+
+  <!-- Formulario deslizante -->
+  @if (showForm) {
+    <div class="form-overlay" (click)="onDismissForm()"></div>
+    <div class="form-sheet">
+      <div class="sheet-handle"></div>
+      <h2 class="sheet-title">Nuevo hábito</h2>
+
+      <form [formGroup]="habitForm" (ngSubmit)="onCreateHabit()">
+        <div class="field-group">
+          <label class="field-label">Nombre</label>
+          <input
+            class="field-input"
+            formControlName="name"
+            placeholder="Ej. Meditar 10 minutos"
+            type="text"
+            autocapitalize="sentences"
+          />
+          @if (habitForm.get('name')?.invalid && habitForm.get('name')?.touched) {
+            <span class="field-error">Mínimo 2 caracteres</span>
+          }
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Descripción <span class="optional">opcional</span></label>
+          <input
+            class="field-input"
+            formControlName="description"
+            placeholder="¿Para qué quieres este hábito?"
+            type="text"
+            autocapitalize="sentences"
+          />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Frecuencia</label>
+          <div class="frequency-toggle">
+            <button
+              type="button"
+              class="freq-btn"
+              [class.active]="habitForm.get('frequency')?.value === 'daily'"
+              (click)="habitForm.get('frequency')?.setValue('daily')"
+            >Diario</button>
+            <button
+              type="button"
+              class="freq-btn"
+              [class.active]="habitForm.get('frequency')?.value === 'weekly'"
+              (click)="habitForm.get('frequency')?.setValue('weekly')"
+            >Semanal</button>
+          </div>
+        </div>
+
+        <div class="sheet-actions">
+          <button type="button" class="btn-cancel" (click)="onDismissForm()">Cancelar</button>
+          <button type="submit" class="btn-save" [disabled]="habitForm.invalid">Guardar hábito</button>
+        </div>
+      </form>
+    </div>
+  }
+
+  @if (habits$ | async; as habits) {
+    @if (habits.length === 0) {
+      <div class="empty-state">
+        <ng-lottie [options]="emptyAnimation" class="empty-lottie"></ng-lottie>
+        <p class="empty-title">Sin hábitos todavía</p>
+        <p class="empty-sub">Pulsa <strong>+</strong> para empezar tu primera racha</p>
+      </div>
+    } @else {
+      <div class="habits-grid">
+        @for (habit of habits; track habit.id) {
+          <div class="habit-card" [class.completed]="isCompletedToday(habit)">
+
+            <div class="card-left">
+              <div class="streak-ring" [class.active]="habit.currentStreak > 0">
+                <svg viewBox="0 0 44 44" class="ring-svg">
+                  <circle cx="22" cy="22" r="18" class="ring-bg"/>
+                  <circle
+                    cx="22" cy="22" r="18"
+                    class="ring-fill"
+                    [style.stroke-dashoffset]="isCompletedToday(habit) ? 0 : 113"
+                  />
+                </svg>
+                <span class="streak-number">{{ habit.currentStreak }}</span>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <p class="habit-name">{{ habit.name }}</p>
+              @if (habit.description) {
+                <p class="habit-desc">{{ habit.description }}</p>
+              }
+              <div class="habit-meta">
+                <span class="freq-chip" [class.weekly]="habit.frequency === 'weekly'">
+                  {{ habit.frequency === 'daily' ? 'Diario' : 'Semanal' }}
+                </span>
+                @if (habit.longestStreak > 1) {
+                  <span class="best-streak">🏆 {{ habit.longestStreak }}d</span>
+                }
+              </div>
+            </div>
+
+            <div class="card-right">
+              @if (completingHabitId === habit.id) {
+                <ng-lottie [options]="checkAnimation" class="check-lottie"></ng-lottie>
+              } @else {
+                <button
+                  class="check-btn"
+                  [class.done]="isCompletedToday(habit)"
+                  [disabled]="isCompletedToday(habit)"
+                  (click)="onComplete(habit)"
+                >
+                  <ion-icon [name]="isCompletedToday(habit) ? 'checkmark-circle' : 'checkmark-circle-outline'"></ion-icon>
+                </button>
+              }
+              <button class="delete-btn" (click)="onDelete(habit)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </button>
+            </div>
+
+          </div>
+        }
+      </div>
+    }
+  }
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openCreateForm()" class="fab-add">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
