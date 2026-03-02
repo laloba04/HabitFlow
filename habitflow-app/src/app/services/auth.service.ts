@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-// Placeholder user interface — will be replaced with Firebase User once Firebase is configured
+import { Auth, onAuthStateChanged, signInWithEmailAndPassword,
+         createUserWithEmailAndPassword, signOut, User,
+         updateProfile } from '@angular/fire/auth';
+
 export interface AppUser {
   uid: string;
   email: string | null;
@@ -11,52 +14,64 @@ export interface AppUser {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
 
-  // BehaviorSubject holds the current user state; null means logged out
   private currentUserSubject = new BehaviorSubject<AppUser | null>(null);
-
-  /** Observable stream of the authenticated user. Subscribe to react to auth state changes. */
   currentUser$: Observable<AppUser | null> = this.currentUserSubject.asObservable();
 
-  constructor() {}
+  private authStateUnsubscribe: (() => void) | null = null;
+  private authInitialized = false;
 
-  /**
-   * Sign in with email and password.
-   * TODO: Replace with Firebase Auth signInWithEmailAndPassword.
-   */
+  constructor(private auth: Auth) {
+    this.authStateUnsubscribe = onAuthStateChanged(this.auth, (firebaseUser: User | null) => {
+      this.authInitialized = true;
+      if (firebaseUser) {
+        this.currentUserSubject.next({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName
+        });
+      } else {
+        this.currentUserSubject.next(null);
+      }
+    });
+  }
+
+  isAuthInitialized(): boolean {
+    return this.authInitialized;
+  }
+
   async login(email: string, password: string): Promise<void> {
-    throw new Error('login() not yet implemented — awaiting Firebase configuration');
+    await signInWithEmailAndPassword(this.auth, email, password);
   }
 
-  /**
-   * Create a new account with email and password.
-   * TODO: Replace with Firebase Auth createUserWithEmailAndPassword.
-   */
-  async register(email: string, password: string): Promise<void> {
-    throw new Error('register() not yet implemented — awaiting Firebase configuration');
+  async register(email: string, password: string, displayName?: string): Promise<void> {
+    const credential = await createUserWithEmailAndPassword(this.auth, email, password);
+    if (displayName) {
+      await updateProfile(credential.user, { displayName });
+      this.currentUserSubject.next({
+        uid: credential.user.uid,
+        email: credential.user.email,
+        displayName
+      });
+    }
   }
 
-  /**
-   * Sign out the current user.
-   * TODO: Replace with Firebase Auth signOut.
-   */
   async logout(): Promise<void> {
-    this.currentUserSubject.next(null);
+    await signOut(this.auth);
   }
 
-  /**
-   * Returns the current user snapshot (synchronous).
-   * Use currentUser$ for reactive bindings.
-   */
   getCurrentUser(): AppUser | null {
     return this.currentUserSubject.getValue();
   }
 
-  /**
-   * Returns true if a user is currently authenticated.
-   */
   isAuthenticated(): boolean {
     return this.currentUserSubject.getValue() !== null;
+  }
+
+  ngOnDestroy(): void {
+    if (this.authStateUnsubscribe) {
+      this.authStateUnsubscribe();
+    }
   }
 }

@@ -13,7 +13,6 @@ import { AuthService } from '../../services/auth.service';
 export class LoginPage {
 
   loginForm: FormGroup;
-  // Tracks whether the password field is visible as plain text
   showPassword = false;
 
   constructor(
@@ -29,7 +28,6 @@ export class LoginPage {
     });
   }
 
-  /** Convenience getter so the template can access controls without verbose paths */
   get email() { return this.loginForm.get('email'); }
   get password() { return this.loginForm.get('password'); }
 
@@ -49,11 +47,10 @@ export class LoginPage {
       const { email, password } = this.loginForm.value;
       await this.authService.login(email, password);
       await loading.dismiss();
-      // Navigate into the app after successful login
       this.router.navigateByUrl('/tabs', { replaceUrl: true });
     } catch (error: unknown) {
       await loading.dismiss();
-      await this.showError(error);
+      await this.showFirebaseError(error);
     }
   }
 
@@ -65,8 +62,25 @@ export class LoginPage {
     this.router.navigateByUrl('/register');
   }
 
-  private async showError(error: unknown): Promise<void> {
-    const message = error instanceof Error ? error.message : 'Ocurrió un error inesperado.';
+  private getFirebaseErrorMessage(error: unknown): string {
+    const code = (error as { code?: string })?.code ?? '';
+
+    const messages: Record<string, string> = {
+      'auth/user-not-found':        'Usuario no encontrado. Comprueba el correo.',
+      'auth/wrong-password':        'Contraseña incorrecta. Inténtalo de nuevo.',
+      'auth/invalid-credential':    'Credenciales inválidas. Verifica tu correo y contraseña.',
+      'auth/too-many-requests':     'Demasiados intentos fallidos. Prueba más tarde.',
+      'auth/invalid-email':         'El formato del correo electrónico no es válido.',
+      'auth/user-disabled':         'Esta cuenta ha sido deshabilitada. Contacta con soporte.',
+      'auth/network-request-failed':'Sin conexión a internet. Verifica tu red.',
+      'auth/operation-not-allowed': 'Inicio de sesión con email/contraseña no habilitado.',
+    };
+
+    return messages[code] ?? 'Ocurrió un error inesperado. Inténtalo de nuevo.';
+  }
+
+  private async showFirebaseError(error: unknown): Promise<void> {
+    const message = this.getFirebaseErrorMessage(error);
     const alert = await this.alertCtrl.create({
       header: 'Error al iniciar sesión',
       message,
