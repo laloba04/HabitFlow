@@ -1,0 +1,81 @@
+// Centers the form vertically and adds consistent padding
+.login-content {
+  --background: var(--ion-background-color, #ffffff);
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px 20px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+// Branding section
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .app-icon {
+    font-size: 64px;
+    color: var(--ion-color-primary);
+  }
+
+  .app-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 8px 0 4px;
+    color: var(--ion-color-dark);
+  }
+
+  .app-subtitle {
+    font-size: 0.95rem;
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+}
+
+// Form fields
+.form-item {
+  --border-radius: 12px;
+  --background: var(--ion-color-light);
+  --padding-start: 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+}
+
+// Validation error messages
+.error-note {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ion-color-danger);
+  padding: 2px 4px 8px;
+}
+
+// Primary action button
+.login-button {
+  margin-top: 24px;
+  --border-radius: 12px;
+  height: 52px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+// Register link at the bottom
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+  }
+
+  .link-text {
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+}

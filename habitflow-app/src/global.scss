@@ -1,0 +1,83 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+// ── Tema HabitFlow ───────────────────────────────────────────────
+:root {
+  --hf-bg:           #F0F4FF;
+  --hf-surface:      #FFFFFF;
+  --hf-surface2:     #F5F7FF;
+  --hf-border:       rgba(99, 102, 241, 0.12);
+  --hf-text:         #1A1B3A;
+  --hf-muted:        #8B8FA8;
+  --hf-accent:       #6366F1;
+  --hf-accent2:      #06B6D4;
+  --hf-accent3:      #10B981;
+  --hf-accent-glow:  rgba(99, 102, 241, 0.22);
+  --hf-orb1:         rgba(99, 102, 241, 0.18);
+  --hf-orb2:         rgba(6, 182, 212, 0.14);
+  --hf-orb3:         rgba(16, 185, 129, 0.10);
+  --hf-ring-col:     rgba(99, 102, 241, 0.08);
+  --hf-danger:       #EF4444;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hf-bg:           #0A0B18;
+    --hf-surface:      #13142A;
+    --hf-surface2:     #1A1B35;
+    --hf-border:       rgba(129, 140, 248, 0.18);
+    --hf-text:         #E8EAFF;
+    --hf-muted:        #6B7280;
+    --hf-accent:       #818CF8;
+    --hf-accent2:      #22D3EE;
+    --hf-accent3:      #34D399;
+    --hf-accent-glow:  rgba(129, 140, 248, 0.3);
+    --hf-orb1:         rgba(99, 102, 241, 0.40);
+    --hf-orb2:         rgba(6, 182, 212, 0.32);
+    --hf-orb3:         rgba(16, 185, 129, 0.25);
+    --hf-ring-col:     rgba(129, 140, 248, 0.14);
+    --hf-danger:       #F87171;
+  }
+}
+
+// Fondo global de la app
+app-habits {
+  ion-content {
+    --background: var(--hf-bg);
+  }
+}
