@@ -10,7 +10,7 @@ import { DashboardPage } from './dashboard.page';
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,   // needed for routerLink directives in the template
+    RouterModule,
     IonicModule,
     DashboardPageRoutingModule
   ],

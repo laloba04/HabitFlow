@@ -1,5 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  deleteDoc,
+  doc,
+  query,
+  where,
+  orderBy
+} from '@angular/fire/firestore';
 
 export type ExpenseCategory =
   | 'food'
@@ -16,8 +28,8 @@ export interface Expense {
   amount: number;
   category: ExpenseCategory;
   description: string;
-  date: string;
-  createdAt: string;
+  date: string;       // YYYY-MM-DD
+  createdAt: string;  // ISO
 }
 
 @Injectable({
@@ -25,29 +37,35 @@ export interface Expense {
 })
 export class ExpenseService {
 
-  constructor() {}
+  constructor(private firestore: Firestore) {}
 
-  // TODO: conectar con Firestore
-  getExpenses(userId: string, month?: string): Observable<Expense[]> {
-    return of([]);
+  // Devuelve los gastos del usuario en tiempo real, ordenados por fecha descendente
+  getExpenses(userId: string): Observable<Expense[]> {
+    const ref = collection(this.firestore, 'expenses');
+    const q = query(
+      ref,
+      where('userId', '==', userId),
+      orderBy('date', 'desc')
+    );
+    return collectionData(q, { idField: 'id' }) as Observable<Expense[]>;
   }
 
   async createExpense(expense: Omit<Expense, 'id'>): Promise<void> {
-    throw new Error('pendiente de implementar');
-  }
-
-  async updateExpense(expenseId: string, changes: Partial<Expense>): Promise<void> {
-    throw new Error('pendiente de implementar');
+    const ref = collection(this.firestore, 'expenses');
+    await addDoc(ref, expense);
   }
 
   async deleteExpense(expenseId: string): Promise<void> {
-    throw new Error('pendiente de implementar');
+    const ref = doc(this.firestore, 'expenses', expenseId);
+    await deleteDoc(ref);
   }
 
+  // Suma total de un array de gastos (ya filtrado por mes en el componente)
   getMonthlyTotal(expenses: Expense[]): number {
     return expenses.reduce((sum, e) => sum + e.amount, 0);
   }
 
+  // Totales por categoría
   getCategoryBreakdown(expenses: Expense[]): Record<ExpenseCategory, number> {
     const breakdown: Partial<Record<ExpenseCategory, number>> = {};
     for (const expense of expenses) {

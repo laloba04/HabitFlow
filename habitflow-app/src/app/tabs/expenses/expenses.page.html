@@ -1,13 +1,169 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>expenses</ion-title>
+    <ion-title>
+      <span class="title-text">Mis gastos</span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">expenses</ion-title>
+      <ion-title size="large">
+        <span class="title-large">Mis gastos</span>
+      </ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Fondo animado (idéntico al de hábitos) -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+  </div>
+
+  <!-- Tarjeta de resumen del mes -->
+  <div class="summary-card">
+    <div class="month-nav">
+      <button class="nav-btn" (click)="prevMonth()" aria-label="Mes anterior">
+        <ion-icon name="chevron-back"></ion-icon>
+      </button>
+      <span class="month-label">{{ monthLabel }}</span>
+      <button class="nav-btn" (click)="nextMonth()" [disabled]="isCurrentMonth" aria-label="Mes siguiente">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+    <p class="total-amount">{{ formatAmount(monthlyTotal) }}</p>
+    <p class="total-sub">{{ transactionCount }} {{ transactionCount === 1 ? 'transacción' : 'transacciones' }}</p>
+  </div>
+
+  <!-- Overlay del bottom sheet -->
+  @if (showForm) {
+    <div class="form-overlay" (click)="onDismissForm()"></div>
+    <div class="form-sheet">
+      <div class="sheet-handle"></div>
+      <h2 class="sheet-title">Nuevo gasto</h2>
+
+      <form [formGroup]="expenseForm" (ngSubmit)="onCreateExpense()">
+
+        <!-- Importe -->
+        <div class="field-group">
+          <label class="field-label">Importe (€)</label>
+          <input
+            class="field-input amount-input"
+            formControlName="amount"
+            type="number"
+            inputmode="decimal"
+            placeholder="0,00"
+            min="0.01"
+            step="0.01"
+          />
+          @if (expenseForm.get('amount')?.invalid && expenseForm.get('amount')?.touched) {
+            <span class="field-error">Introduce un importe válido</span>
+          }
+        </div>
+
+        <!-- Categoría: grid táctil -->
+        <div class="field-group">
+          <label class="field-label">Categoría</label>
+          <div class="category-grid">
+            @for (cat of categories; track cat[0]) {
+              <button
+                type="button"
+                class="cat-chip"
+                [class.active]="expenseForm.get('category')?.value === cat[0]"
+                (click)="selectCategory(cat[0])"
+              >
+                <span class="cat-emoji">{{ cat[1].emoji }}</span>
+                <span class="cat-label">{{ cat[1].label }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="field-group">
+          <label class="field-label">Descripción</label>
+          <input
+            class="field-input"
+            formControlName="description"
+            type="text"
+            placeholder="¿En qué lo gastaste?"
+            autocapitalize="sentences"
+          />
+          @if (expenseForm.get('description')?.invalid && expenseForm.get('description')?.touched) {
+            <span class="field-error">Añade una descripción</span>
+          }
+        </div>
+
+        <!-- Fecha -->
+        <div class="field-group">
+          <label class="field-label">Fecha</label>
+          <input
+            class="field-input"
+            formControlName="date"
+            type="date"
+          />
+        </div>
+
+        <div class="sheet-actions">
+          <button type="button" class="btn-cancel" (click)="onDismissForm()">Cancelar</button>
+          <button type="submit" class="btn-save" [disabled]="expenseForm.invalid">Guardar gasto</button>
+        </div>
+
+      </form>
+    </div>
+  }
+
+  <!-- Lista de gastos agrupada por fecha -->
+  @if (groups.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">💸</div>
+      <p class="empty-title">Sin gastos este mes</p>
+      <p class="empty-sub">Pulsa <strong>+</strong> para registrar tu primer gasto</p>
+    </div>
+  } @else {
+    <div class="expenses-list">
+      @for (group of groups; track group.date) {
+        <div class="date-group">
+          <p class="date-header">{{ group.label }}</p>
+          @for (expense of group.items; track expense.id) {
+            <div class="expense-card">
+
+              <div class="expense-icon">
+                <span>{{ getCategoryEmoji(expense.category) }}</span>
+              </div>
+
+              <div class="expense-body">
+                <p class="expense-category">{{ getCategoryLabel(expense.category) }}</p>
+                <p class="expense-desc">{{ expense.description }}</p>
+              </div>
+
+              <div class="expense-right">
+                <p class="expense-amount">-{{ formatAmount(expense.amount) }}</p>
+                <button
+                  class="delete-btn"
+                  (click)="onDelete(expense)"
+                  aria-label="Eliminar gasto"
+                >
+                  <ion-icon name="trash-outline"></ion-icon>
+                </button>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- FAB -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openCreateForm()" class="fab-add">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
