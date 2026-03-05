@@ -1,13 +1,64 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>profile</ion-title>
+    <ion-title>
+      <span class="title-text">Perfil</span>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
+      <ion-title size="large">
+        <span class="title-large">Perfil</span>
+      </ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Fondo animado -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+  </div>
+
+  <!-- Avatar y datos del usuario -->
+  <div class="profile-hero">
+    <div class="avatar" aria-hidden="true">
+      <span class="avatar-initial">{{ avatarInitial }}</span>
+    </div>
+    <h2 class="profile-name">{{ displayName }}</h2>
+    <p class="profile-email">{{ email }}</p>
+  </div>
+
+  <!-- Preferencias -->
+  <div class="section">
+    <p class="section-label">Preferencias</p>
+
+    <div class="pref-row">
+      <div class="pref-info">
+        <ion-icon name="moon-outline" class="pref-icon" aria-hidden="true"></ion-icon>
+        <span class="pref-text">Modo oscuro</span>
+      </div>
+      <ion-toggle
+        [checked]="darkMode"
+        (ionChange)="onDarkModeChange($event)"
+        aria-label="Activar modo oscuro"
+        class="dark-toggle"
+      ></ion-toggle>
+    </div>
+  </div>
+
+  <!-- Cuenta -->
+  <div class="section">
+    <p class="section-label">Cuenta</p>
+
+    <button class="logout-btn" (click)="logout()">
+      <ion-icon name="log-out-outline" class="logout-icon" aria-hidden="true"></ion-icon>
+      <span>Cerrar sesión</span>
+    </button>
+  </div>
+
 </ion-content>
