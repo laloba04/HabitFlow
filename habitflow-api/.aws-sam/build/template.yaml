@@ -1,0 +1,135 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "HabitFlow API - Backend serverless para seguimiento de h\xE1bitos y\
+  \ gastos"
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        FIREBASE_PROJECT_ID:
+          Ref: FirebaseProjectId
+        HABITS_TABLE:
+          Ref: HabitsTable
+        EXPENSES_TABLE:
+          Ref: ExpensesTable
+  HttpApi:
+    CorsConfiguration:
+      AllowOrigins:
+      - '*'
+      AllowHeaders:
+      - '*'
+      AllowMethods:
+      - '*'
+Parameters:
+  FirebaseProjectId:
+    Type: String
+    Description: ID del proyecto de Firebase para verificar tokens JWT
+    Default: ''
+Resources:
+  HabitsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: habitflow-habits
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: userId
+        AttributeType: S
+      - AttributeName: habitId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: userId
+        KeyType: HASH
+      - AttributeName: habitId
+        KeyType: RANGE
+  ExpensesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: habitflow-expenses
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+      - AttributeName: userId
+        AttributeType: S
+      - AttributeName: expenseId
+        AttributeType: S
+      KeySchema:
+      - AttributeName: userId
+        KeyType: HASH
+      - AttributeName: expenseId
+        KeyType: RANGE
+  HabitsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/habits.lambda_handler
+      Description: "CRUD de h\xE1bitos con autenticaci\xF3n Firebase"
+      Role: arn:aws:iam::515466560499:role/LabRole
+      Events:
+        GetHabits:
+          Type: HttpApi
+          Properties:
+            Path: /habits
+            Method: GET
+        CreateHabit:
+          Type: HttpApi
+          Properties:
+            Path: /habits
+            Method: POST
+        UpdateHabit:
+          Type: HttpApi
+          Properties:
+            Path: /habits/{habitId}
+            Method: PUT
+        DeleteHabit:
+          Type: HttpApi
+          Properties:
+            Path: /habits/{habitId}
+            Method: DELETE
+      CodeUri: HabitsFunction
+    Metadata:
+      SamResourceId: HabitsFunction
+  ExpensesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/expenses.lambda_handler
+      Description: "CRUD de gastos con autenticaci\xF3n Firebase"
+      Role: arn:aws:iam::515466560499:role/LabRole
+      Events:
+        GetExpenses:
+          Type: HttpApi
+          Properties:
+            Path: /expenses
+            Method: GET
+        CreateExpense:
+          Type: HttpApi
+          Properties:
+            Path: /expenses
+            Method: POST
+        DeleteExpense:
+          Type: HttpApi
+          Properties:
+            Path: /expenses/{expenseId}
+            Method: DELETE
+      CodeUri: ExpensesFunction
+    Metadata:
+      SamResourceId: ExpensesFunction
+Outputs:
+  ApiUrl:
+    Description: URL del API Gateway HTTP
+    Value:
+      Fn::Sub: https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com
+    Export:
+      Name: HabitFlowApiUrl
+  HabitsTableName:
+    Description: "Nombre de la tabla DynamoDB de h\xE1bitos"
+    Value:
+      Ref: HabitsTable
+    Export:
+      Name: HabitFlowHabitsTable
+  ExpensesTableName:
+    Description: Nombre de la tabla DynamoDB de gastos
+    Value:
+      Ref: ExpensesTable
+    Export:
+      Name: HabitFlowExpensesTable
