@@ -1,1 +1,9 @@
 .claude/
+*.json
+!package.json
+!package-lock.json
+!tsconfig*.json
+!angular.json
+!capacitor.config.json
+!firebase.json
+habitflow-maria-dev-firebase-adminsdk-fbsvc-d6029c74e1.json
