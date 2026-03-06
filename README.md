@@ -249,15 +249,15 @@ Este proyecto cubre los siguientes temas del examen:
 
 ## 🗺️ Roadmap
 
-- [ ] Setup proyecto Ionic + Angular
-- [ ] Autenticación Firebase
-- [ ] Backend AWS Lambda
-- [ ] CRUD hábitos
-- [ ] CRUD gastos
-- [ ] Seguridad (throttling, validación)
+- [x] Setup proyecto Ionic + Angular
+- [x] Autenticación Firebase
+- [x] Backend AWS Lambda
+- [x] CRUD hábitos
+- [x] CRUD gastos
+- [x] Seguridad (throttling, validación)
 - [ ] Bot Telegram
 - [ ] Landing page
-- [ ] Dashboard con gráficos
+- [x] Dashboard con gráficos
 - [ ] Notificaciones push
 
 ## 👩‍💻 Autora
