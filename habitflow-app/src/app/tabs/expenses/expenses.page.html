@@ -117,6 +117,31 @@
     </div>
   }
 
+  <!-- Desglose por categorías (solo si hay gastos) -->
+  @if (groups.length > 0) {
+    <div class="category-breakdown">
+      <p class="section-label">Por categoría</p>
+      @for (item of categoryBreakdown; track item.category) {
+        <div class="cat-row">
+          <div class="cat-row__header">
+            <span class="cat-row__emoji" aria-hidden="true">{{ item.emoji }}</span>
+            <span class="cat-row__name">{{ item.label }}</span>
+            <span class="cat-row__spacer"></span>
+            <span class="cat-row__amount">{{ formatAmount(item.amount) }}</span>
+            <span class="cat-row__pct">{{ item.percent }}%</span>
+          </div>
+          <div class="cat-row__track">
+            <div
+              class="cat-row__fill"
+              [style.width.%]="item.percent"
+              [style.background]="item.color"
+            ></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
   <!-- Lista de gastos agrupada por fecha -->
   @if (groups.length === 0) {
     <div class="empty-state">

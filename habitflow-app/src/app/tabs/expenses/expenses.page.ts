@@ -8,14 +8,14 @@ import { ExpenseService, Expense, ExpenseCategory } from '../../services/expense
 import { AuthService } from '../../services/auth.service';
 
 // Metadatos de cada categoría: emoji y etiqueta visible
-export const CATEGORY_META: Record<ExpenseCategory, { emoji: string; label: string }> = {
-  food:          { emoji: '🍔', label: 'Comida' },
-  transport:     { emoji: '🚌', label: 'Transporte' },
-  entertainment: { emoji: '🎬', label: 'Ocio' },
-  health:        { emoji: '💊', label: 'Salud' },
-  shopping:      { emoji: '🛍️', label: 'Compras' },
-  bills:         { emoji: '📱', label: 'Facturas' },
-  other:         { emoji: '📦', label: 'Otros' },
+export const CATEGORY_META: Record<ExpenseCategory, { emoji: string; label: string; color: string }> = {
+  food:          { emoji: '🍔', label: 'Comida',     color: '#F59E0B' },
+  transport:     { emoji: '🚌', label: 'Transporte', color: '#3B82F6' },
+  entertainment: { emoji: '🎬', label: 'Ocio',       color: '#8B5CF6' },
+  health:        { emoji: '💊', label: 'Salud',      color: '#10B981' },
+  shopping:      { emoji: '🛍️', label: 'Compras',   color: '#EC4899' },
+  bills:         { emoji: '📱', label: 'Facturas',   color: '#6366F1' },
+  other:         { emoji: '📦', label: 'Otros',      color: '#6B7280' },
 };
 
 // Grupo de tarjetas con encabezado de fecha
@@ -23,6 +23,16 @@ export interface ExpenseGroup {
   label: string;   // 'Hoy', 'Ayer', 'dd/mm'
   date: string;    // YYYY-MM-DD
   items: Expense[];
+}
+
+// Fila de breakdown de categoría para las barras CSS
+export interface CategoryBreakdownItem {
+  category: ExpenseCategory;
+  emoji: string;
+  label: string;
+  amount: number;
+  percent: number;
+  color: string;
 }
 
 @Component({
@@ -45,6 +55,9 @@ export class ExpensesPage implements OnInit, OnDestroy {
   // Totales para la cabecera
   monthlyTotal = 0;
   transactionCount = 0;
+
+  // Desglose de categorías para las barras CSS
+  categoryBreakdown: CategoryBreakdownItem[] = [];
 
   // Categorías disponibles para el grid del formulario
   readonly categories = Object.entries(CATEGORY_META) as [ExpenseCategory, { emoji: string; label: string }][];
@@ -113,12 +126,36 @@ export class ExpensesPage implements OnInit, OnDestroy {
     return this.activeMonth === this.getCurrentMonth();
   }
 
-  // Filtra por mes y reagrupa
+  // Filtra por mes, reagrupa y recalcula el breakdown de categorías
   private applyMonthFilter(): void {
     const filtered = this.allExpenses.filter(e => e.date.startsWith(this.activeMonth));
     this.monthlyTotal = this.expenseService.getMonthlyTotal(filtered);
     this.transactionCount = filtered.length;
     this.groups = this.buildGroups(filtered);
+    this.categoryBreakdown = this.buildCategoryBreakdown(filtered);
+  }
+
+  // Construye el array de items de breakdown ordenado por importe desc
+  private buildCategoryBreakdown(expenses: Expense[]): CategoryBreakdownItem[] {
+    if (expenses.length === 0) return [];
+
+    const raw = this.expenseService.getCategoryBreakdown(expenses);
+    const total = this.expenseService.getMonthlyTotal(expenses);
+
+    return (Object.entries(raw) as [ExpenseCategory, number][])
+      .filter(([, amount]) => amount > 0)
+      .sort(([, a], [, b]) => b - a)
+      .map(([category, amount]) => {
+        const meta = CATEGORY_META[category];
+        return {
+          category,
+          emoji: meta.emoji,
+          label: meta.label,
+          amount,
+          percent: total > 0 ? Math.round((amount / total) * 100) : 0,
+          color: meta.color,
+        };
+      });
   }
 
   // Agrupa gastos por fecha con etiqueta legible

@@ -13,6 +13,7 @@ import { LottieComponent, provideLottieOptions } from 'ngx-lottie';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { environment } from '../environments/environment';
 
@@ -33,7 +34,8 @@ import { AppRoutingModule } from './app-routing.module';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideLottieOptions({ player: () => import('lottie-web') })
+    provideLottieOptions({ player: () => import('lottie-web') }),
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [AppComponent],
 })

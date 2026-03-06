@@ -135,6 +135,89 @@ ion-toolbar {
   margin: 0;
 }
 
+// ── Desglose por categorías ─────────────────────────────────────
+.category-breakdown {
+  position: relative;
+  z-index: 1;
+  margin: 4px 16px 8px;
+  background: var(--hf-surface);
+  border: 1.5px solid var(--hf-border);
+  border-radius: 22px;
+  padding: 16px 18px 18px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  animation: cardIn 0.4s ease both;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--hf-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  margin: 0 0 14px;
+}
+
+.cat-row {
+  margin-bottom: 12px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.cat-row__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.cat-row__emoji {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cat-row__name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--hf-text);
+  white-space: nowrap;
+}
+
+.cat-row__spacer {
+  flex: 1;
+}
+
+.cat-row__amount {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--hf-text);
+  white-space: nowrap;
+}
+
+.cat-row__pct {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--hf-muted);
+  min-width: 32px;
+  text-align: right;
+}
+
+// Barra de progreso CSS puro
+.cat-row__track {
+  height: 6px;
+  background: var(--hf-surface2);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid var(--hf-border);
+}
+
+.cat-row__fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 2px; // siempre visible aunque el % sea muy pequeño
+}
+
 // ── Lista de gastos ─────────────────────────────────────────────
 .expenses-list {
   position: relative;
