@@ -31,34 +31,87 @@
     <p class="greeting-date">{{ today | date:'EEEE, d MMMM':'':'es' }}</p>
   </div>
 
-  <!-- Grid 2x2 de estadísticas -->
-  <div class="stats-grid">
+  <!-- Fila: donut progreso + tarjetas de stats -->
+  <div class="progress-row">
 
-    <div class="stat-card">
-      <span class="stat-emoji" aria-hidden="true">✅</span>
-      <p class="stat-value">{{ completedToday }}/{{ totalHabits }}</p>
-      <p class="stat-label">Hábitos hoy</p>
+    <!-- Donut de progreso diario -->
+    <div class="chart-card chart-card--donut-sm">
+      <p class="chart-title">Hoy</p>
+      <div class="donut-wrap">
+        <canvas
+          baseChart
+          type="doughnut"
+          [data]="progressChartData"
+          [options]="progressChartOptions"
+          aria-label="Progreso de hábitos hoy"
+        ></canvas>
+        <!-- Porcentaje centrado sobre el donut -->
+        <div class="donut-center">
+          <span class="donut-percent">{{ progressPercent }}%</span>
+        </div>
+      </div>
+      <p class="donut-sub">{{ completedToday }}/{{ totalHabits }} hábitos</p>
     </div>
 
-    <div class="stat-card">
-      <span class="stat-emoji" aria-hidden="true">🔥</span>
-      <p class="stat-value">{{ longestStreak }}</p>
-      <p class="stat-label">Mejor racha (días)</p>
-    </div>
+    <!-- Tarjetas de stats -->
+    <div class="stats-col">
 
-    <div class="stat-card">
-      <span class="stat-emoji" aria-hidden="true">💰</span>
-      <p class="stat-value">{{ monthlyExpenses | number:'1.2-2' }}€</p>
-      <p class="stat-label">Gasto del mes</p>
-    </div>
+      <div class="stat-card">
+        <span class="stat-emoji" aria-hidden="true">🔥</span>
+        <div class="stat-info">
+          <p class="stat-value">{{ longestStreak }}</p>
+          <p class="stat-label">Mejor racha</p>
+        </div>
+      </div>
 
-    <div class="stat-card">
-      <span class="stat-emoji" aria-hidden="true">📋</span>
-      <p class="stat-value">{{ totalHabits }}</p>
-      <p class="stat-label">Hábitos activos</p>
-    </div>
+      <div class="stat-card">
+        <span class="stat-emoji" aria-hidden="true">💰</span>
+        <div class="stat-info">
+          <p class="stat-value stat-value--sm">{{ monthlyExpenses | number:'1.2-2' }}€</p>
+          <p class="stat-label">Gasto del mes</p>
+        </div>
+      </div>
 
+      <div class="stat-card">
+        <span class="stat-emoji" aria-hidden="true">📋</span>
+        <div class="stat-info">
+          <p class="stat-value">{{ totalHabits }}</p>
+          <p class="stat-label">Hábitos activos</p>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+  <!-- Barras semanales -->
+  <div class="chart-card chart-card--bars">
+    <p class="chart-title">Últimos 7 días</p>
+    <div class="bars-canvas-wrap">
+      <canvas
+        baseChart
+        type="bar"
+        [data]="weeklyChartData"
+        [options]="weeklyChartOptions"
+        aria-label="Hábitos completados en los últimos 7 días"
+      ></canvas>
+    </div>
+  </div>
+
+  <!-- Donut de gastos por categoría (solo si hay gastos este mes) -->
+  @if (hasExpenses) {
+    <div class="chart-card chart-card--donut-lg">
+      <p class="chart-title">Gastos por categoría</p>
+      <div class="expenses-canvas-wrap">
+        <canvas
+          baseChart
+          type="doughnut"
+          [data]="expensesChartData"
+          [options]="expensesChartOptions"
+          aria-label="Distribución de gastos por categoría este mes"
+        ></canvas>
+      </div>
+    </div>
+  }
 
   <!-- Accesos rápidos -->
   <div class="quick-access">
