@@ -3,6 +3,8 @@ import Hero from '@/components/Hero'
 import Features from '@/components/Features'
 import Platforms from '@/components/Platforms'
 import Stats from '@/components/Stats'
+import Security from '@/components/Security'
+import TechStack from '@/components/TechStack'
 import FAQ from '@/components/FAQ'
 import CTA from '@/components/CTA'
 import Footer from '@/components/Footer'
@@ -15,6 +17,8 @@ export default function Home() {
       <Features />
       <Platforms />
       <Stats />
+      <Security />
+      <TechStack />
       <FAQ />
       <CTA />
       <Footer />

@@ -256,8 +256,17 @@ Este proyecto cubre los siguientes temas del examen:
 - [x] CRUD gastos
 - [x] Seguridad (throttling, validación)
 - [x] Bot Telegram
-- [ ] Landing page
 - [x] Dashboard con gráficos
+- [~] Landing page (base hecha, pendiente mejoras)
+- [x] Hero con mockup de la app
+- [x] Características (6 cards)
+- [x] Plataformas y arquitectura
+- [x] Estadísticas con contadores animados
+- [x] FAQ con acordeón
+- [x] CTA y Footer
+- [x] Sección de Seguridad
+  - [x] Sección de Tech Stack
+  - [ ] Despliegue en Vercel
 - [ ] Notificaciones push
 
 ## 👩‍💻 Autora
