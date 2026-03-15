@@ -72,3 +72,22 @@ Thumbs.db
 # Firebase credentials
 src/environments/environment.ts
 src/environments/environment.prod.ts
+google-services.json
+GoogleService-Info.plist
+firebase-credentials.json
+*.json
+!package.json
+!tsconfig.json
+!angular.json
+!capacitor.config.json
+
+# Mobile Build Artifacts
+**/android/app/build/
+**/ios/App/App/public/
+**/android/app/src/main/assets/public/
+**/ios/App/build/
+.gradle/
+build/
+bin/
+obj/
+

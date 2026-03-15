@@ -129,10 +129,10 @@ Resources:
           Type: Schedule
           Properties:
             # Cron expression de AWS: formato (minutos horas dia_del_mes mes dia_de_la_semana año)
-            # Ajustado a las 15:35 UTC para que coincida con las 16:35h local aprox.
-            Schedule: cron(35 15 * * ? *)
+            # Ejemplo: Todos los días a las 16:30 UTC
+            Schedule: cron(30 16 * * ? *)
             Name: HabitFlowDailyPushEvent
-            Description: Gatillo de Amazon EventBridge (Ajustado para prueba)
+            Description: Gatillo de Amazon EventBridge a las 16:30h
             Enabled: True
 
 Outputs:

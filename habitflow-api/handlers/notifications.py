@@ -6,9 +6,9 @@ from firebase_admin import credentials, messaging, firestore
 # Mantiene vivo Firebase entre ejecuciones en Lambda para ser más rápido
 if not firebase_admin._apps:
     try:
-        # Cargamos las credenciales del archivo local que hemos copiado al directorio del API
-        cred = credentials.Certificate('firebase-credentials.json')
-        default_app = firebase_admin.initialize_app(cred)
+        # En AWS, usaremos la cuenta de servicio por defecto (Application Default Credentials)
+        # o si quieres cargar un JSON concreto lo inyectaremos por variables de entorno.
+        default_app = firebase_admin.initialize_app()
     except Exception as e:
         print(f"Error inicializando Firebase Admin: {e}")
 
