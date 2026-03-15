@@ -115,6 +115,26 @@ Resources:
             Path: /expenses/{expenseId}
             Method: DELETE
 
+  # Cron (EventBridge) para lanzar Notificaciones Push todos los días a las 20:00 (hora UTC)
+  NotificationsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/notifications.lambda_handler
+      Description: Despierta a los dispositivos y comprueba los records de hábitos
+      Role: arn:aws:iam::515466560499:role/LabRole
+      Timeout: 60
+      MemorySize: 256
+      Events:
+        DailyPushTrigger:
+          Type: Schedule
+          Properties:
+            # Cron expression de AWS: formato (minutos horas dia_del_mes mes dia_de_la_semana año)
+            # Ejemplo: Todos los días a las 16:30 UTC
+            Schedule: cron(30 16 * * ? *)
+            Name: HabitFlowDailyPushEvent
+            Description: Gatillo de Amazon EventBridge a las 16:30h
+            Enabled: True
+
 Outputs:
   ApiUrl:
     Description: URL del API Gateway HTTP
