@@ -15,7 +15,7 @@ HabitFlow es un ecosistema completo para el seguimiento de hábitos y control de
 **Plataformas:**
 - 📱 **iOS** (Ionic)
 - 🤖 **Android** (Ionic)
-- 🌐 **Web** (Landing Next.js)
+- 🌐 **Web** (Landing Next.js) - [habit-flow-psi-one.vercel.app](https://habit-flow-psi-one.vercel.app/)
 - 🤖 **Telegram** (Bot Python)
 
 ## 🏗️ Arquitectura
@@ -266,7 +266,7 @@ Este proyecto cubre los siguientes temas del examen:
 - [x] CTA y Footer
 - [x] Sección de Seguridad
   - [x] Sección de Tech Stack
-  - [ ] Despliegue en Vercel
+  - [x] Despliegue en Vercel
 - [ ] Notificaciones push
 
 ## 👩‍💻 Autora
