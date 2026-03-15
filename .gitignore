@@ -1,4 +1,7 @@
 .claude/
+node_modules/
+.next/
+out/
 *.json
 !package.json
 !package-lock.json

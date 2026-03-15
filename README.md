@@ -255,7 +255,7 @@ Este proyecto cubre los siguientes temas del examen:
 - [x] CRUD hábitos
 - [x] CRUD gastos
 - [x] Seguridad (throttling, validación)
-- [ ] Bot Telegram
+- [x] Bot Telegram
 - [ ] Landing page
 - [x] Dashboard con gráficos
 - [ ] Notificaciones push
