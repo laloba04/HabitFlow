@@ -72,3 +72,7 @@ Thumbs.db
 # Firebase credentials
 src/environments/environment.ts
 src/environments/environment.prod.ts
+
+# Firebase Push Notification native configurations
+google-services.json
+GoogleService-Info.plist
