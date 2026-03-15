@@ -52,21 +52,24 @@ export class PushNotificationService {
   }
 
   private async saveTokenToFirestore(token: string) {
-    try {
-      // Tomar el usuario actual en 1 intento sin suscribirse al observable continuo
-      const user = this.authService.getCurrentUser();
-      if (!user) {
-        console.warn('No hay usuario logueado, no se guardará el token de Push');
-        return;
+    // Nos suscribimos al estado del usuario para asegurar que guardamos el token
+    // en cuanto la sesión esté lista o si el usuario hace login después de abrir la app.
+    this.authService.currentUser$.subscribe(async user => {
+      if (user) {
+        try {
+          const userDocRef = doc(this.firestore, `users/${user.uid}`);
+          await setDoc(userDocRef, { 
+            fcmToken: token, 
+            updatedAt: new Date().toISOString(),
+            platform: 'android'
+          }, { merge: true });
+          console.log('Token guardado en Firestore correctamente para el usuario', user.uid);
+        } catch (error) {
+          console.error('Error al guardar el token push en Firestore:', error);
+        }
+      } else {
+        console.warn('Esperando a que el usuario se loguee para guardar el Token de Push...');
       }
-
-      // Guardamos (o actualizamos) en la colección users
-      const userDocRef = doc(this.firestore, `users/${user.uid}`);
-      await setDoc(userDocRef, { fcmToken: token, updatedAt: new Date().toISOString() }, { merge: true });
-      console.log('Token guardado en Firestore correctamente para el usuario', user.uid);
-      
-    } catch (error) {
-      console.error('Error al guardar el token push en Firestore:', error);
-    }
+    });
   }
 }
