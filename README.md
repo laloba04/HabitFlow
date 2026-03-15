@@ -267,7 +267,7 @@ Este proyecto cubre los siguientes temas del examen:
 - [x] Sección de Seguridad
   - [x] Sección de Tech Stack
   - [x] Despliegue en Vercel
-- [ ] Notificaciones push
+- [x] Notificaciones push
 
 ## 👩‍💻 Autora
 
