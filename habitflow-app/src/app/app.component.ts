@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Platform } from '@ionic/angular';
+import { PushNotificationService } from './services/push-notification.service';
 
 @Component({
   selector: 'app-root',
@@ -6,8 +8,11 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
-  constructor() {
+export class AppComponent implements OnInit {
+  constructor(
+    private platform: Platform,
+    private pushService: PushNotificationService
+  ) {
     // Si el usuario guardó preferencia la usamos; si no, tomamos la del sistema
     const saved = localStorage.getItem('darkMode');
     const isDark = saved !== null
@@ -18,5 +23,12 @@ export class AppComponent {
       document.body.classList.add('dark');
       document.documentElement.classList.add('ion-palette-dark');
     }
+  }
+
+  ngOnInit() {
+    this.platform.ready().then(() => {
+      // Iniciar notificaciones push (pide permisos en dispositivos nativos)
+      this.pushService.initPush();
+    });
   }
 }
