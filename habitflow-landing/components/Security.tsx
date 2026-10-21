@@ -6,36 +6,36 @@ const securityLayers = [
   {
     icon: '🔐',
     title: 'Firebase Auth',
-    description: 'Email/password y proveedores sociales. JWT tokens con renovación automática de sesión.',
-    items: ['JWT Tokens', 'Refresh automático', 'Providers sociales'],
+    description: 'Login con email y contraseña. El SDK de Firebase emite el token y renueva la sesión.',
+    items: ['Email y contraseña', 'Token de ID', 'Sesión persistente'],
     color: 'accent',
   },
   {
     icon: '🛡️',
     title: 'API Gateway',
-    description: 'Rate limiting con throttling y burst limit. HTTPS obligatorio con TLS 1.2+.',
-    items: ['100 req/s por IP', 'Burst limit: 200', 'TLS 1.2+'],
+    description: 'HTTP API de API Gateway delante de las funciones Lambda, definida en la plantilla SAM.',
+    items: ['Solo HTTPS', 'CORS', 'Definida con SAM'],
     color: 'primary',
   },
   {
     icon: 'λ',
     title: 'Lambda Validation',
-    description: 'Verificación JWT, sanitización de inputs y logging seguro sin datos sensibles.',
-    items: ['Verificación JWT', 'Sanitización XSS', 'IAM mínimo privilegio'],
+    description: 'Cada petición verifica el token de Firebase y valida y sanea los datos de entrada.',
+    items: ['Verificación del token', 'Validación de entradas', 'Saneado de texto'],
     color: 'blue',
   },
   {
     icon: '🗄️',
     title: 'DynamoDB',
-    description: 'Cifrado en reposo con AWS KMS. Acceso exclusivo por IAM, sin credenciales en código.',
-    items: ['Cifrado KMS', 'Acceso por IAM', 'Queries seguras via SDK'],
+    description: 'Tablas de hábitos y gastos definidas en SAM. Acceso desde Lambda con el SDK, sin credenciales en el código.',
+    items: ['Definida con SAM', 'Acceso con boto3', 'Sin credenciales en código'],
     color: 'red',
   },
   {
     icon: '🖥️',
     title: 'Frontend',
-    description: 'Sanitización XSS, Content Security Policy y Firebase Security Rules por usuario.',
-    items: ['CSP Headers', 'Escape XSS', 'Security Rules'],
+    description: 'Firestore Security Rules: cada usuario solo puede leer y escribir sus propios datos.',
+    items: ['Security Rules', 'Datos por usuario', 'Escapado de Angular'],
     color: 'purple',
   },
 ]
@@ -156,7 +156,7 @@ export default function Security() {
               <h3 className="text-lg font-bold text-white">Nota Producción</h3>
             </div>
             <p className="text-dark-300 text-sm leading-relaxed">
-              En producción se añadiría <span className="text-orange-300 font-medium">AWS WAF</span> para protección adicional contra SQL injection, XSS y DDoS. Para este proyecto se usa throttling de API Gateway como alternativa viable.
+              Para producción faltaría añadir <span className="text-orange-300 font-medium">throttling en API Gateway</span>, un rol IAM propio con mínimo privilegio y AWS WAF.
             </p>
           </div>
         </div>

@@ -33,8 +33,7 @@ Authorization: Bearer <Firebase ID Token>
 - Verificación JWT de Firebase con `python-jose` + certificados públicos de Google
 - Validación y sanitización de inputs en cada request
 - `ConditionExpression` en DynamoDB para verificar ownership antes de modificar
-- Rate limiting via API Gateway throttling
-- IAM con principio de mínimo privilegio
+- Pendiente: throttling en API Gateway y rol IAM propio (ahora usa LabRole de AWS Academy)
 
 ## 📁 Estructura
 

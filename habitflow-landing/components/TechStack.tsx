@@ -7,8 +7,8 @@ const techStack = [
     category: 'Frontend Móvil',
     icon: '📱',
     items: [
-      { name: 'Ionic 7', description: 'Framework híbrido' },
-      { name: 'Angular 17', description: 'Framework SPA' },
+      { name: 'Ionic 8', description: 'Framework híbrido' },
+      { name: 'Angular 20', description: 'Framework SPA' },
       { name: 'Capacitor', description: 'Runtime nativo' },
     ],
     color: 'primary',
@@ -19,7 +19,7 @@ const techStack = [
     items: [
       { name: 'AWS Lambda', description: 'Compute serverless' },
       { name: 'DynamoDB', description: 'Base de datos NoSQL' },
-      { name: 'API Gateway', description: 'API REST + throttling' },
+      { name: 'API Gateway', description: 'API REST (HTTP API)' },
     ],
     color: 'accent',
   },
@@ -186,10 +186,10 @@ export default function TechStack() {
             <div className="text-3xl mb-4">🎓</div>
             <h3 className="text-xl font-bold text-white mb-3">AWS Certified Developer Associate</h3>
             <p className="text-dark-300 text-sm max-w-2xl mx-auto mb-6">
-              Este proyecto cubre temas clave del examen: desarrollo serverless, DynamoDB, API Gateway, IAM, SAM/CloudFormation y CloudWatch.
+              Este proyecto cubre temas clave del examen: desarrollo serverless, DynamoDB, API Gateway, SAM/CloudFormation y CloudWatch.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              {['Lambda', 'DynamoDB', 'API Gateway', 'IAM', 'SAM', 'CloudWatch'].map((service) => (
+              {['Lambda', 'DynamoDB', 'API Gateway', 'SAM', 'CloudWatch'].map((service) => (
                 <span key={service} className="px-4 py-2 rounded-xl bg-accent-500/15 border border-accent-500/20 text-sm text-accent-300 font-medium">
                   {service}
                 </span>

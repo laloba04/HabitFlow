@@ -22,9 +22,9 @@ Aplicación móvil híbrida construida con Ionic y Angular. Funciona en iOS, And
 
 | Tecnología | Uso |
 |------------|-----|
-| Ionic 7 | Framework UI |
-| Angular 17 | Framework |
-| Capacitor 5 | Native bridge |
+| Ionic 8 | Framework UI |
+| Angular 20 | Framework |
+| Capacitor 8 | Native bridge |
 | Firebase Auth | Autenticación |
 
 ## 📁 Estructura

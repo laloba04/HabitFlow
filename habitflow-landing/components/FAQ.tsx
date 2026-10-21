@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     question: '¿Mis datos están seguros?',
-    answer: 'Absolutamente. Usamos Firebase Auth para autenticación, JWT para verificación, rate limiting en API Gateway, validación de inputs en Lambda, y cifrado en reposo con AWS KMS en DynamoDB.',
+    answer: 'Absolutamente. Usamos Firebase Auth para autenticación, JWT para verificación, validación de inputs en Lambda y Firestore Security Rules para que cada usuario solo vea sus datos.',
   },
   {
     question: '¿Cuánto cuesta mantener el backend?',

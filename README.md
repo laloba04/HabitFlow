@@ -32,7 +32,7 @@ HabitFlow es un ecosistema completo para el seguimiento de hábitos y control de
                 ▼
        ┌─────────────────┐
        │   API Gateway   │
-       │  (+ throttling) │
+       │   (HTTP API)    │
        └────────┬────────┘
                 ▼
        ┌─────────────────┐
@@ -49,7 +49,7 @@ HabitFlow es un ecosistema completo para el seguimiento de hábitos y control de
 
 | Componente | Descripción | Tecnología |
 |------------|-------------|------------|
-| **habitflow-app** | App móvil híbrida | Ionic 7 + Angular 17 |
+| **habitflow-app** | App móvil híbrida | Ionic 8 + Angular 20 |
 | **habitflow-api** | Backend serverless | AWS Lambda + DynamoDB |
 | **habitflow-bot** | Bot de Telegram | Python + python-telegram-bot |
 | **habitflow-landing** | Landing page | Next.js + Tailwind + Vercel |
@@ -78,46 +78,31 @@ HabitFlow es un ecosistema completo para el seguimiento de hábitos y control de
 ## 🔐 Seguridad
 
 ### Autenticación (Firebase)
-- **Firebase Auth**: Email/password + providers sociales
-- **JWT tokens**: Verificación en cada request a Lambda
-- **Refresh tokens**: Renovación automática de sesión
-
-### API Gateway
-- **Throttling**: Rate limiting (100 requests/segundo por IP)
-- **Burst limit**: Máximo 200 requests en ráfaga
-- **API Key**: Autenticación de clientes (opcional)
-- **HTTPS only**: TLS 1.2+ obligatorio
+- **Firebase Auth**: email y contraseña
+- **Firestore Security Rules**: cada usuario solo accede a sus datos
 
 ### Lambda
-- **Validación de inputs**: Sanitización de todos los datos
-- **Verificación JWT**: Comprobar token de Firebase en cada request
-- **Variables de entorno**: Credenciales en env vars (no hardcodeadas)
-- **Logging seguro**: Sin datos sensibles en CloudWatch
-- **IAM roles mínimos**: Principio de mínimo privilegio
-
-### Frontend
-- **Sanitización XSS**: Escape de contenido dinámico
-- **HTTPS obligatorio**: Comunicación cifrada
-- **CSP Headers**: Content Security Policy
-- **Firebase Security Rules**: Acceso restringido por usuario
+- **Verificación del token de Firebase** en cada petición
+- **Validación y saneado de entradas** (`utils/validator.py`)
+- **Configuración por variables de entorno**, sin credenciales en el código
 
 ### DynamoDB
-- **Cifrado en reposo**: Automático con AWS KMS
-- **Acceso por IAM**: Sin credenciales en código
-- **Consultas seguras**: Sin inyección gracias a SDK
+- **Acceso con el SDK** (boto3), sin construir consultas a mano
 
-### Nota sobre producción
-> En un entorno de producción se añadiría AWS WAF para protección adicional contra ataques comunes (SQL injection, XSS, DDoS). Para este proyecto se usa throttling de API Gateway como alternativa.
+### Pendiente para producción
+- Límites de peticiones (throttling) en API Gateway
+- Rol IAM propio con mínimo privilegio (ahora usa el `LabRole` de AWS Academy)
+- AWS WAF
 
 ## 🛠️ Tech Stack
 
 | Capa | Tecnología |
 |------|------------|
-| Mobile | Ionic 7, Angular 17, Capacitor |
+| Mobile | Ionic 8, Angular 20, Capacitor 8 |
 | Auth | Firebase Authentication |
 | Backend | AWS Lambda (Python) |
 | Database | DynamoDB |
-| API | API Gateway (con throttling) |
+| API | API Gateway (HTTP API) |
 | Bot | Python + python-telegram-bot |
 | Landing | Next.js 14, Tailwind CSS |
 | Hosting | Vercel (landing), AWS (API) |
@@ -212,13 +197,6 @@ FIREBASE_PROJECT_ID=tu-proyecto
 FIREBASE_API_KEY=tu-api-key
 ```
 
-### API Gateway Throttling
-```yaml
-# template.yaml
-ThrottlingBurstLimit: 200
-ThrottlingRateLimit: 100
-```
-
 ### Telegram
 1. Crear bot con @BotFather
 2. Copiar token a variables de entorno
@@ -232,7 +210,7 @@ Este proyecto cubre los siguientes temas del examen:
 | Desarrollo serverless | Lambda |
 | Bases de datos NoSQL | DynamoDB |
 | APIs REST | API Gateway |
-| Seguridad | IAM, throttling |
+| Seguridad | Verificación de tokens, validación de entradas |
 | Infraestructura como código | SAM/CloudFormation |
 | Monitorización | CloudWatch |
 
@@ -254,7 +232,7 @@ Este proyecto cubre los siguientes temas del examen:
 - [x] Backend AWS Lambda
 - [x] CRUD hábitos
 - [x] CRUD gastos
-- [x] Seguridad (throttling, validación)
+- [x] Seguridad (verificación de tokens, validación)
 - [x] Bot Telegram
 - [x] Dashboard con gráficos
 - [~] Landing page (base hecha, pendiente mejoras)

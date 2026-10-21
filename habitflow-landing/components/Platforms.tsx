@@ -8,7 +8,7 @@ const platforms = [
     name: 'App Móvil',
     subtitle: 'iOS & Android',
     description: 'App híbrida con Ionic y Angular. Funciona en iOS, Android y Web con una sola base de código.',
-    tech: ['Ionic 7', 'Angular 17', 'Capacitor'],
+    tech: ['Ionic 8', 'Angular 20', 'Capacitor 8'],
     color: 'primary',
   },
   {
@@ -142,7 +142,7 @@ export default function Platforms() {
               <div className="text-dark-500 text-2xl">↓</div>
               <div className="inline-block px-6 py-3 rounded-xl bg-accent-500/15 border border-accent-500/20 text-sm text-accent-300 font-medium">🔐 Firebase Auth</div>
               <div className="text-dark-500 text-2xl">↓</div>
-              <div className="inline-block px-6 py-3 rounded-xl bg-orange-500/15 border border-orange-500/20 text-sm text-orange-300 font-medium">⚡ API Gateway + throttling</div>
+              <div className="inline-block px-6 py-3 rounded-xl bg-orange-500/15 border border-orange-500/20 text-sm text-orange-300 font-medium">⚡ API Gateway (HTTP API)</div>
               <div className="text-dark-500 text-2xl">↓</div>
               <div className="inline-block px-6 py-3 rounded-xl bg-red-500/15 border border-red-500/20 text-sm text-red-300 font-medium">λ Lambda (validación)</div>
               <div className="text-dark-500 text-2xl">↓</div>
